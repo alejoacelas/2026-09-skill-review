@@ -1,0 +1,6 @@
+feedback*.local.json
+*.log
+.venv/
+__pycache__/
+.DS_Store
+artifacts.local/
