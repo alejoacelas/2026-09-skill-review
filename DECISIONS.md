@@ -18,3 +18,5 @@ Freeze documents at exact commits and expose source links. Keep version labels n
 ## Decision log
 
 2026-09-29: Use narrow comparisons, selectable passage tags and excerpt-based retention choices, following the reviewer's preference for concrete judgments over broad scores. Keep missing-content notes available for omissions that a comparison cannot surface.
+
+2026-09-29: Serve further trials by name (`?trial=`), each with its own data and feedback file, so new trials never touch earlier feedback. Add a **Really good** tag, since the reviewer wants to mark strong passages as well as weak ones. Trials without curated differences show only the Opening and Full README steps.

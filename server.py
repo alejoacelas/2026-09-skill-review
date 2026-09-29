@@ -6,15 +6,26 @@ import os
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import urlsplit
+import re
+from urllib.parse import parse_qs, urlsplit
 
 ROOT = Path(__file__).resolve().parent
 
 class Handler(SimpleHTTPRequestHandler):
+    def feedback_file(self):
+        # Each trial keeps its own feedback file; the original trial keeps the default path.
+        trial = parse_qs(urlsplit(self.path).query).get('trial', [''])[0]
+        if not trial:
+            return self.server.feedback
+        if not re.fullmatch(r'[a-z0-9][a-z0-9-]{0,80}', trial):
+            raise ValueError('Invalid trial name')
+        return self.server.feedback.with_name(f'feedback.{trial}.local.json')
+
     def do_GET(self):
         if urlsplit(self.path).path == '/api/feedback':
             try:
-                data = json.loads(self.server.feedback.read_text()) if self.server.feedback.exists() else None
+                path = self.feedback_file()
+                data = json.loads(path.read_text()) if path.exists() else None
                 self.json_response(200, data)
             except (OSError, ValueError):
                 self.json_response(500, {'error': 'Could not read saved feedback'})
@@ -22,7 +33,7 @@ class Handler(SimpleHTTPRequestHandler):
         super().do_GET()
 
     def do_POST(self):
-        if self.path != '/api/feedback':
+        if urlsplit(self.path).path != '/api/feedback':
             self.json_response(404, {'error': 'Not found'})
             return
         origin = self.headers.get('Origin')
@@ -37,9 +48,10 @@ class Handler(SimpleHTTPRequestHandler):
             data = json.loads(self.rfile.read(size))
             if not isinstance(data, dict) or data.get('schema') != 1 or not isinstance(data.get('annotations'), list) or not isinstance(data.get('ratings'), dict):
                 raise ValueError('Invalid feedback format')
-            tmp = self.server.feedback.with_suffix('.tmp')
+            path = self.feedback_file()
+            tmp = path.with_suffix('.tmp')
             tmp.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n')
-            os.replace(tmp, self.server.feedback)
+            os.replace(tmp, path)
             self.json_response(200, {'saved': True})
         except (ValueError, OSError) as exc:
             self.json_response(400, {'error': str(exc)})

@@ -1,0 +1,145 @@
+{
+ "id": "repo-sharing-docs-v1",
+ "title": "Prepare a repo for sharing: draft skill v1 against no skill",
+ "date": "2026-09-29",
+ "model": "Claude Opus 5.5 subagents (general-purpose), same session and settings for every run",
+ "context_note": "Six fresh subagents, one per run, each in its own clone with no Git remote. They shared the user-level CLAUDE.md. Skill runs read skill v1 from a copy outside the case folder. Not OS-level sandboxes.",
+ "skill": {
+  "version": "v1",
+  "location": "private-skills/skill-cases/repo-sharing-docs/runs/skill-v1",
+  "sha256_list": "runs/skill-v1.sha256"
+ },
+ "tasks": {
+  "morning": "Prepare this repo for sharing with people who'd like an app like this.",
+  "writing": "Prepare this repo for sharing with writers or teams who'd want these checks.",
+  "team": "Rewrite the README for peer organisations that might want to run this."
+ },
+ "projects": {
+  "morning": "Morning reader",
+  "writing": "Writing checks",
+  "team": "Team agent server"
+ },
+ "blinding": "A/B fixed per project so the skill version is not always A: morning A=no skill, writing A=skill, team A=no skill. The condition field reveals the mapping; the review page does not show it.",
+ "runs": [
+  {
+   "id": "morning-a",
+   "project": "morning",
+   "arm": "a",
+   "condition": "none",
+   "repository": "alejoacelas/2026-09-morning-reader",
+   "base_commit": "d5f83458bfc708d08433f457113fb5384b623390",
+   "result_commit": "3f49747700b69bbefedb45b839c02a7ec716eb33",
+   "saved_outputs": "private-skills/skill-cases/repo-sharing-docs/runs/2026-09-29/morning-reader-none",
+   "docs": [
+    {
+     "id": "readme",
+     "path": "README.md",
+     "label": "README",
+     "file": "readme.md"
+    }
+   ]
+  },
+  {
+   "id": "morning-b",
+   "project": "morning",
+   "arm": "b",
+   "condition": "skill",
+   "repository": "alejoacelas/2026-09-morning-reader",
+   "base_commit": "d5f83458bfc708d08433f457113fb5384b623390",
+   "result_commit": "3bdc6e55a10225084e2eaf995007750c4e7af4fa",
+   "saved_outputs": "private-skills/skill-cases/repo-sharing-docs/runs/2026-09-29/morning-reader-skill",
+   "docs": [
+    {
+     "id": "readme",
+     "path": "README.md",
+     "label": "README",
+     "file": "readme.md"
+    },
+    {
+     "id": "setup",
+     "path": "docs/setup.md",
+     "label": "Setup guide",
+     "file": "setup.md"
+    }
+   ]
+  },
+  {
+   "id": "team-a",
+   "project": "team",
+   "arm": "a",
+   "condition": "none",
+   "repository": "alejoacelas/team-agent-server",
+   "base_commit": "dc5acc6189eb7d90d947d5de12cf8b7842379491",
+   "result_commit": "da99ee126eb3b097eede674daa3f446f0b7daa20",
+   "saved_outputs": "private-skills/skill-cases/repo-sharing-docs/runs/2026-09-29/team-agent-server-none",
+   "docs": [
+    {
+     "id": "readme",
+     "path": "README.md",
+     "label": "README",
+     "file": "readme.md"
+    }
+   ]
+  },
+  {
+   "id": "team-b",
+   "project": "team",
+   "arm": "b",
+   "condition": "skill",
+   "repository": "alejoacelas/team-agent-server",
+   "base_commit": "dc5acc6189eb7d90d947d5de12cf8b7842379491",
+   "result_commit": "d956c26f3c783bc1b52e96016d7d3da528805a01",
+   "saved_outputs": "private-skills/skill-cases/repo-sharing-docs/runs/2026-09-29/team-agent-server-skill",
+   "docs": [
+    {
+     "id": "readme",
+     "path": "README.md",
+     "label": "README",
+     "file": "readme.md"
+    }
+   ]
+  },
+  {
+   "id": "writing-a",
+   "project": "writing",
+   "arm": "a",
+   "condition": "skill",
+   "repository": "alejoacelas/writing-checks",
+   "base_commit": "904f3f84a27b03cc112167e5950d69676d5d793b",
+   "result_commit": "8f975803e51c0011ab8975b297ce789e0f3151a1",
+   "saved_outputs": "private-skills/skill-cases/repo-sharing-docs/runs/2026-09-29/writing-checks-skill",
+   "docs": [
+    {
+     "id": "readme",
+     "path": "README.md",
+     "label": "README",
+     "file": "readme.md"
+    },
+    {
+     "id": "usage",
+     "path": "USAGE.md",
+     "label": "Usage",
+     "file": "usage.md"
+    }
+   ]
+  },
+  {
+   "id": "writing-b",
+   "project": "writing",
+   "arm": "b",
+   "condition": "none",
+   "repository": "alejoacelas/writing-checks",
+   "base_commit": "904f3f84a27b03cc112167e5950d69676d5d793b",
+   "result_commit": "5d0565b5a02af1034c4c597155cf265d81d2d4a2",
+   "saved_outputs": "private-skills/skill-cases/repo-sharing-docs/runs/2026-09-29/writing-checks-none",
+   "docs": [
+    {
+     "id": "readme",
+     "path": "README.md",
+     "label": "README",
+     "file": "readme.md"
+    }
+   ]
+  }
+ ]
+}
